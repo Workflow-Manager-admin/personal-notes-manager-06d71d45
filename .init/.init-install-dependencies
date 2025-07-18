@@ -1,4 +1,0 @@
-{
-    "command": "cd db_visualizer && npm install",
-    "working_directory": "/home/kavia/workspace/code-generation/personal-notes-manager-06d71d45/notes_db"
-}
