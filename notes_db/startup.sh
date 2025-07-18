@@ -133,6 +133,19 @@ EOF
 echo "psql postgresql://${DB_USER}:${DB_PASSWORD}@localhost:${DB_PORT}/${DB_NAME}" > db_connection.txt
 echo "Connection string saved to db_connection.txt"
 
+# === APPLY DATABASE SCHEMA/INIT SCRIPT ===
+if [ -f "init.sql" ]; then
+    echo "Applying DB schema from init.sql..."
+    PGPASSWORD="${DB_PASSWORD}" ${PG_BIN}/psql -h localhost -U ${DB_USER} -d ${DB_NAME} -p ${DB_PORT} -f init.sql
+    if [ $? -eq 0 ]; then
+      echo "DB schema (init.sql) applied successfully!"
+    else
+      echo "Warning: Could not apply DB schema - manual intervention may be needed."
+    fi
+else
+    echo "init.sql not found, skipping schema initialization!"
+fi
+
 # Save environment variables to a file
 cat > db_visualizer/postgres.env << EOF
 export POSTGRES_URL="postgresql://localhost:${DB_PORT}/${DB_NAME}"
